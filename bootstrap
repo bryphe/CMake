@@ -82,17 +82,11 @@ cmake_sphinx_flags=""
 # Determine whether this is a Cygwin environment.
 if echo "${cmake_system}" | grep CYGWIN >/dev/null 2>&1; then
   cmake_system_cygwin=true
+  cmake_system_mingw=true
   cmake_doc_dir_keyword="CYGWIN"
   cmake_man_dir_keyword="CYGWIN"
 else
   cmake_system_cygwin=false
-fi
-
-# Determine whether this is a MinGW environment.
-if echo "${cmake_system}" | grep 'MINGW\|MSYS' >/dev/null 2>&1; then
-  cmake_system_mingw=true
-else
-  cmake_system_mingw=false
 fi
 
 # Determine whether this is OS X
@@ -1290,15 +1284,8 @@ cmake_compiler_settings_comment="/*
 
 cmake_report cmConfigure.h${_tmp} "${cmake_compiler_settings_comment}"
 
-# When bootstrapping on MinGW with MSYS we must convert the source
-# directory to a windows path.
-if ${cmake_system_mingw}; then
-    CMAKE_BOOTSTRAP_SOURCE_DIR=`cd "${cmake_source_dir}"; pwd -W`
-    CMAKE_BOOTSTRAP_BINARY_DIR=`cd "${cmake_binary_dir}"; pwd -W`
-else
-    CMAKE_BOOTSTRAP_SOURCE_DIR="${cmake_source_dir}"
-    CMAKE_BOOTSTRAP_BINARY_DIR="${cmake_binary_dir}"
-fi
+CMAKE_BOOTSTRAP_SOURCE_DIR="${cmake_source_dir}"
+CMAKE_BOOTSTRAP_BINARY_DIR="${cmake_binary_dir}"
 
 # Write CMake version
 cmake_report cmVersionConfig.h${_tmp} "#define CMake_VERSION_MAJOR ${cmake_version_major}"
